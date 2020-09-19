@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Svelte 101 Workshop - Routing</title>
+  <meta name="description" content="">
+  <link href="data:image/x-icon;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQEAYAAABPYyMiAAAABmJLR0T///////8JWPfcAAAACXBIWXMAAABIAAAASABGyWs+AAAAF0lEQVRIx2NgGAWjYBSMglEwCkbBSAcACBAAAeaR9cIAAAAASUVORK5CYII=" rel="icon" type="image/x-icon" />
+  
+    
+    <link rel="stylesheet" href="https://unpkg.com/mvp.css">
+    
+    
+  <meta property="og:title" content="Svelte 101 Workshop - Routing">
+  <meta property="og:image" content="">
+  <meta property="og:image:alt" content="">
+  <meta property="og:description" content="">
+  
+  
+  <link rel="stylesheet"
+        href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.0/build/styles/agate.min.css">
+  <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.0/build/highlight.min.js"></script>     
+  <script>hljs.initHighlightingOnLoad();</script>  
+  
+</head>
+
+<body>
+  <div id="wrapper">
+  <header>
+  <nav>
+    <a href="/">Workshop Menu</a>
+    <a href="/z-prereqs">Prerequisites</a>
+    <a href="/hyper63">About hyper63</a>
+  </nav>
+  <h1>SvelteJS 101 Workshop</h1>
+</header>
+
+<main>
+
+<h1 id="svelte-and-routing">Svelte and Routing</h1>
+<p>Routing conversations always come up when trying to separate concerns from a JS Library and a full JS Framework, currently, Svelte does not have an official routing library, but there are several top modules available.</p>
+<ul>
+<li>Sapper comes with routing built in.</li>
+<li>Elder.js - static site generator with routing</li>
+<li>Routify - Svelte library focused on routing</li>
+</ul>
+<p>In this tutorial we are going to use <code>pagejs</code> a framework agnostic router that will demonstrate how you might handle routing with svelte.</p>
+<p>src/Router.svelte</p>
+<pre><code class="language-html">&lt;script&gt;
+  import router from &#39;page&#39;
+
+  // pages
+  import Start from &#39;./pages/Start.svelte&#39;
+  import Signup from &#39;./pages/auth/Signup.svelte&#39;
+  import Signin from &#39;./pages/auth/Signin.svelte&#39;
+
+  let page, params, qs
+
+  page(&#39;/&#39;, navTo(Start))
+  page(&#39;/signin&#39;, navTo(Signin))
+  page(&#39;/signup&#39;, navTo(Signup))
+
+  page.start()
+
+  function navTo(Component) {
+    return ctx =&gt; {
+      params = ctx.params
+      qs = ( new URLSearchParams(ctx.querystring))
+        .entries()
+        .map(e =&gt; ({e[0]: e[1]}))
+      page = Component
+    }
+  }
+&lt;/script&gt;
+&lt;svelte:component this={page} {params} {qs} /&gt;</code></pre>
+<p>Basically, the main take away here is that the <code>&lt;svelte:component&gt;</code> is a directive that allows you to dynamically 
+create components when you assign the component to the <code>this</code> property. So when we change the assignment in each event handler of the router, Svelte dynamically renders the new page. We can also pass params down to the page components. In this example, we are passing the params which are url params and the querystring. This way we can access url parts at the page component level.</p>
+<p>Exercise</p>
+<p>Lets create a child router for Tasks</p>
+<pre><code class="language-html">&lt;script&gt;
+  import router from &#39;page&#39;
+
+  import Task from &#39;./Show.svelte&#39;
+  import Form from &#39;./Form.svelte&#39;
+
+  let page, params, qs
+
+  page(&#39;/tasks/new&#39;, navTo(Form))
+  page(&#39;/tasks/:id/edit&#39;, navTo(Form))
+  page(&#39;/tasks/:id&#39;, navTo(Task))
+
+  page.start()
+
+  function navTo(Component) {
+    return ctx =&gt; {
+      params = ctx.params
+      qs = ( new URLSearchParams(ctx.querystring))
+        .entries()
+        .map(e =&gt; ({e[0]: e[1]}))
+      page = Component
+    }
+  }
+&lt;/script&gt;
+&lt;svelte:component this={page} {params} {qs} /&gt;</code></pre>
+<p>Exercise: Create a child router for projects</p>
+<h3 id="redirecting-programmatically">Redirecting programmatically</h3>
+<p>With routing, you will want to at some point redirect the app to a specific page.</p>
+<p>With <code>page</code> you simply call the route you want to direct:</p>
+<pre><code class="language-html">&lt;script&gt;
+  import page from &#39;page&#39;
+
+  function handleSubmit() {
+    // ...do stuff
+
+    // redirect to projects page
+    page(&#39;/projects&#39;)
+  }
+&lt;/script&gt;
+&lt;!-- template here --&gt;
+</code></pre>
+<p>Lets try it with some of the pages we have already worked on:</p>
+<ul>
+<li>Signup</li>
+<li>Signin</li>
+<li>Task Form</li>
+<li>Task Show</li>
+</ul>
+<hr>
+<p><a href="/">Home</a></p>
+</main>
+
+  </div> 
+</body>
+
+</html>

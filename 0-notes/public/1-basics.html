@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Svelte 101 Workshop - Basics</title>
+  <meta name="description" content="">
+  <link href="data:image/x-icon;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQEAYAAABPYyMiAAAABmJLR0T///////8JWPfcAAAACXBIWXMAAABIAAAASABGyWs+AAAAF0lEQVRIx2NgGAWjYBSMglEwCkbBSAcACBAAAeaR9cIAAAAASUVORK5CYII=" rel="icon" type="image/x-icon" />
+  
+    
+    <link rel="stylesheet" href="https://unpkg.com/mvp.css">
+    
+    
+  <meta property="og:title" content="Svelte 101 Workshop - Basics">
+  <meta property="og:image" content="">
+  <meta property="og:image:alt" content="">
+  <meta property="og:description" content="">
+  
+  
+  <link rel="stylesheet"
+        href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.0/build/styles/agate.min.css">
+  <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.0/build/highlight.min.js"></script>     
+  <script>hljs.initHighlightingOnLoad();</script>  
+  
+</head>
+
+<body>
+  <div id="wrapper">
+  <header>
+  <nav>
+    <a href="/">Workshop Menu</a>
+    <a href="/z-prereqs">Prerequisites</a>
+    <a href="/hyper63">About hyper63</a>
+  </nav>
+  <h1>SvelteJS 101 Workshop</h1>
+</header>
+
+<main>
+
+<h1 id="getting-started-with-svelte">Getting started with Svelte</h1>
+<article>
+  <aside>
+
+<p>Learning Svelte Resources<br>There is a great tutorial walk through of Svelte on the Svelte website - <a href="https://svelte.dev/tutorial/basics">https://svelte.dev/tutorial/basics</a><br>There is a MDN tutorial as well - <a href="https://developer.mozilla.org/en-US/docs/Learn/Tools_and_testing/Client-side_JavaScript_frameworks/Svelte_getting_started">https://developer.mozilla.org/en-US/docs/Learn/Tools_and_testing/Client-side_JavaScript_frameworks/Svelte_getting_started</a>      </p>
+  </aside>
+</article>
+
+<h2 id="prerequisites">Prerequisites</h2>
+<ul>
+<li>Git <a href="https://git-scm.org">https://git-scm.org</a></li>
+<li>Nodejs <a href="https://nodejs.org">https://nodejs.org</a></li>
+<li>Editor <a href="https://code.visualstudio.com">https://code.visualstudio.com</a></li>
+</ul>
+<article>
+  <aside>
+
+<pre><code>If you are using visualstudio code you may want to install the Svelte package: https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode</code></pre>  </aside>
+</article>
+
+<h2 id="what-is-svelte">What is Svelte?</h2>
+<p>Svelte is a web development framework that takes a different approach to creating rich user interfaces online. From the developers perspective Svelte is designed almost as a super-set of HTML, it wants to embrace all of the web&#39;s usability and features. The way svelte transforms from a developer friendly component model to a performant web application is via a compiler, so a large part of svelte is its compiler engine. This engine takes the declarative code you write and transforms it, into vanilla js that is very performant. This is a different approach from other frameworks which use things like the virtual dom at runtime to convert a declarative style of code to the web code need to run in the browser environment.</p>
+<h2 id="use-cases">Use Cases</h2>
+<p>What is Svelte great at? </p>
+<ul>
+<li>Small Web Mobile (PWA) applications</li>
+</ul>
+<p>Svelte is great at creating applications intended for low powered devices and/or slow network connections. Svelte ships less code to the browser. You can find more information about the peformance characteristics of Svelte as compared to other frameworks here: <a href="https://krausest.github.io/js-framework-benchmark/current.html">https://krausest.github.io/js-framework-benchmark/current.html</a></p>
+<ul>
+<li>Interactive visualizations</li>
+</ul>
+<p>The creator of Svelte works for the New York times as an interactive journalist and created Svelte to play nice with other frameworks and web content management systems, as well as provide the performance needed to embed rich visualizations on web pages in a very efficent manner.</p>
+<ul>
+<li>Beginners</li>
+</ul>
+<p>Svelte is a great environment for people new to web development and has basic web development knowledge with HTML and CSS. With Sveltes focus as a super-set of HTML the onboarding into the modern component style of developing is done is a very short time.</p>
+<p>What is Svelte not great at?</p>
+<ul>
+<li>Native Mobile Applications</li>
+</ul>
+<p>Svelte itself is not the whole picture when wanting to create native or hybrid mobile applications, but with the help of projects like <a href="https://svelte-native.technology/">Svelte Native</a> and <a href="https://capacitorjs.com/solution/svelte">Svelte Capacitor</a> you can create great mobile experiences using svelte.</p>
+<ul>
+<li>Large Web Applications</li>
+</ul>
+<p>In order to build large web applications, you need to be able to split your code, have server-side rendering and smart routing. Using companion frameworks like <a href="https://sapper.svelte.dev/">Sapper</a> and <a href="https://elderguide.com/tech/elderjs/">Elder.js</a> you can do both SSR and SSG to create both high performing large web applications or high performing large SEO websites.</p>
+<article><aside>
+
+<p>This workshop assumes you have NodeJS installed as well as yarn <code>npm install yarn -g</code></p>
+</aside></article>
+
+<h2 id="create-a-svelte-project">Create a svelte project</h2>
+<p>We can create a svelte project by running the following command your console:</p>
+<pre><code class="language-sh">npx degit sveltejs/template svelte-basics
+cd svelte-basics
+yarn</code></pre>
+<p>We can run our svelte project by run the following line in our console:</p>
+<pre><code class="language-sh">yarn dev</code></pre>
+<h2 id="tour-of-the-project">Tour of the project</h2>
+<p>In the svelte project you will notice the following directories:</p>
+<ul>
+<li>public</li>
+<li>src</li>
+</ul>
+<p>The public directory contains your <code>index.html</code> and all of your web assets, svelte will compile your code into a bundle and place it in the <code>public/build</code> directory.</p>
+<p>You will see the following files in the root directory. </p>
+<ul>
+<li><code>package.json</code> file, this contains your nodejs project configuration information.</li>
+<li><code>rollup.config.js</code> file, in this setup we are using rollup to bundle and tree shake our svelte compenents into bundled js code.</li>
+<li><code>.gitignore</code> set to ignore files and folders from the project when checked in to git.</li>
+<li><code>yarn.lock</code> a file setup to manage your node module dependencies </li>
+</ul>
+<p>In the <code>src</code> folder you will see a <code>main.js</code> and a <code>App.svelte</code> file. The main.js file is the application root file for the project, it bootstraps your svelte components and binds them to the html page. The App.svelte is the root svelte component. Lets open it up.</p>
+<h2 id="appsvelte-a-svelte-component">App.svelte a svelte component</h2>
+<p>When we open the component we see the following:</p>
+<pre><code class="language-html">&lt;script&gt;
+  export let name;
+&lt;/script&gt;
+
+&lt;main&gt;
+  &lt;h1&gt;Hello {name}!&lt;/h1&gt;
+  &lt;p&gt;Visit the &lt;a href=&quot;https://svelte.dev/tutorial&quot;&gt;Svelte tutorial&lt;/a&gt; to learn how to build Svelte apps.&lt;/p&gt;
+&lt;/main&gt;
+
+&lt;style&gt;
+  main {
+    text-align: center;
+    padding: 1em;
+    max-width: 240px;
+    margin: 0 auto;
+  }
+
+  h1 {
+    color: #ff3e00;
+    text-transform: uppercase;
+    font-size: 4em;
+    font-weight: 100;
+  }
+
+  @media (min-width: 640px) {
+    main {
+      max-width: none;
+    }
+  }
+&lt;/style&gt;</code></pre>
+<p>You can think of a svelte component in three main sections, you have the script section where your code goes and you have the style section where your css code goes and you have any html markup, which is actually a small template laguage.</p>
+<pre><code class="language-html">&lt;!-- programming logic --&gt;
+&lt;script&gt;
+...
+&lt;/script&gt;
+&lt;!-- html template --&gt;
+&lt;main&gt;
+
+&lt;/main&gt;
+&lt;!-- css style --&gt;
+&lt;style&gt;
+...
+&lt;/style&gt;</code></pre>
+<h2 id="write-your-first-svelte-component">Write your first svelte component</h2>
+<p>Lets delete everything from the App.svelte component and replace it with the following:</p>
+<pre><code class="language-html">&lt;h1&gt;My first component&lt;/h1&gt;</code></pre>
+<p>press save. If you are still running the <code>yarn dev</code> command in a console, you should be able to see the
+changes you made.</p>
+<p>This is a svelte component, you see it is a super-set of html so plan html works in a svelte template.</p>
+<p>Lets add some functionality</p>
+<pre><code class="language-html">&lt;script&gt;
+  let count = 0
+&lt;/script&gt;
+&lt;h1&gt;My first component&lt;/h1&gt;
+&lt;button on:click={() =&gt; count += 1}&gt;Count {count}&lt;/button&gt;</code></pre>
+<p>Here we are declaring a local variable which is only scoped to this component then we are presenting the value of the variable in the button text context using single curly braces. And we are hooking into or listening to the click event of the button and running a inline function that increments the count local variable. Svelte compiles this to vanilla js and creates a reactive binding with the local variable and the process of assignment, so when ever a local variable is assigned Svelte knows and updates all of the places svelte is presenting that variable. In this case it is the text context of the button element.</p>
+<p>With svelte we can change the style of that h1 element by just specifying it in a style tag:</p>
+<pre><code class="language-html">&lt;style&gt;
+  h1 {
+    color: rebeccapurple;
+  }
+&lt;/style&gt;</code></pre>
+<p>And when we save our changes, we should see our Hello World text in rebeccapurple.</p>
+<article><aside>
+
+<p>NOTE: Styles are bound to the Svelte Component so you can modify the style of your component, but they do not cascade down to child components or up to parent components, this is by design. If you want to modify styles for multiple components, use the <code>global.css</code> file.</p>
+</aside></article>
+
+<p>We can add logic using the <code>script</code> tag:</p>
+<pre><code class="language-html">&lt;script&gt;
+  let name = &#39;mars&#39;
+&lt;/script&gt;</code></pre>
+<p>This <code>variable</code> name is available within the component:</p>
+<pre><code class="language-html">&lt;h1&gt;Hello {name}!&lt;/h1&gt;</code></pre>
+<p>Using the curly braces I can execute any JS that returns a value inside the <code>svelte</code> template and it will replace that template with the value.</p>
+<pre><code class="language-html">&lt;h1&gt;Hello {name}!&lt;/h1&gt;
+&lt;p&gt;I can add any js to my curly brackets {1 + 41} it just needs to return a value&lt;/p&gt;</code></pre>
+<p>Lets create a counter:</p>
+<pre><code>As a user
+I want to increase the count by 1   
+When I click on the &#39;+&#39; button
+And I want to decrease the count by 1
+When I click on the &#39;-&#39; button</code></pre><pre><code class="language-html">&lt;script&gt;
+
+  let count = 0
+
+  // add inc function
+  // add dec function
+  // handle + button with inc function
+  // handle - button with dec function
+&lt;/script&gt;
+&lt;h1&gt;Count {count}&lt;/h1&gt;
+&lt;button&gt;+&lt;/button&gt;
+&lt;button&gt;-&lt;/button&gt;</code></pre>
+<article><aside>
+
+<p>HINT: to listen to an event you can use the on directive followed by a colon and the event name. For example, if you want to listen for a click event, it would be on:click={fn}</p>
+</aside></article>
+
+<p>Spend 5 minutes to try complete the application.</p>
+<p>Lets go over the result:</p>
+<p>You may have noticed that by declaring a local variable in the svelte script element of the component that variable becomes reactive. Whenever it is modified in the application, then all references are automatically modified and the component is repainted with the new value. This is backed in reactivity that causes the application to function like a spreadsheet. But there is another reactive feature. Like in a spreadsheet you can take the local values and enhance them to create new values. For example, what if everytime count changes we needed a new value generated as part of an equation. Lets create a variable called double and then we will use a special JS label to define our double variable, which will always multiple the value of the count variable by two and assign it to the double variable.</p>
+<pre><code class="language-js">let count = 0
+
+$: double = count * 2</code></pre>
+<p>Now we can display the result of the double in our presentation layer:</p>
+<pre><code class="language-html">&lt;h3&gt;Double: {double}&lt;/h3&gt;</code></pre>
+<p>Thats cool!</p>
+<p>With reactivity you can generate new results based on any value defined on the right side that changes, you can also add code blocks.</p>
+<pre><code class="language-js">$: { 
+  console.log(`${double} is twice the size of ${count}`) 
+}</code></pre>
+<h2 id="svelte-templates-are-easy">Svelte Templates are easy</h2>
+<p>Templates or adding logic to your presentation is a necessary requirement. Svelte gives you three easy to use directives.</p>
+<ul>
+<li>if</li>
+<li>each</li>
+<li>await</li>
+</ul>
+<p>Each one of these directives uses a handlebars like declarative syntax. With the start tag containing a curly pound name curly. <code>{#if __} or {#await __} or {#each ___ as ___}</code> and the closing tag will use a curly slash name and curly. <code>{/if} or {/await} or {/each}</code></p>
+<p>Here are some examples:</p>
+<p>an if block</p>
+<pre><code class="language-html">&lt;script&gt;
+  let error = null
+
+  setTimeout(() =&gt; {
+    error = &#39;An error has occurred in your application!&#39;
+  }, 5000)
+&lt;/script&gt;
+{#if error}
+  &lt;div class=&quot;error&quot;&gt;{error}&lt;/div&gt;
+{/if}
+&lt;style&gt;
+  .error {
+    padding: 16px;
+    text-align: center;
+    border-radius: 4px;
+    background-color: red;
+    color: white;
+    margin-bottom: 24px;
+  }
+&lt;/style&gt;
+</code></pre>
+<p><a href="https://svelte.dev/repl/b8d707297e7342a084fe499702bed9c6?version=3.25.0">https://svelte.dev/repl/b8d707297e7342a084fe499702bed9c6?version=3.25.0</a></p>
+<p>an each block</p>
+<pre><code class="language-html">&lt;script&gt;
+  let colors = [&#39;red&#39;, &#39;green&#39;, &#39;blue&#39;]
+&lt;/script&gt;
+&lt;h1&gt;Colors&lt;/h1&gt;
+&lt;ul&gt;
+{#each colors as color}
+  &lt;li style=&quot;color: {color}&quot;&gt;{color}&lt;/li&gt;
+{/each}
+&lt;/ul&gt;</code></pre>
+<p><a href="https://svelte.dev/repl/b8d707297e7342a084fe499702bed9c6?version=3.25.0">https://svelte.dev/repl/b8d707297e7342a084fe499702bed9c6?version=3.25.0</a></p>
+<p>Lets add some simple functionality to the colors app.</p>
+<pre><code class="language-html">&lt;script&gt;
+  let colors = [&#39;red&#39;, &#39;green&#39;, &#39;blue&#39;]
+  let color = &#39;&#39;
+
+  function addColor () {
+    colors.push(color)
+    color = &#39;&#39;
+  }
+&lt;/script&gt;
+&lt;h1&gt;Colors&lt;/h1&gt;
+&lt;form on:submit|preventDefault={addColor}&gt;
+  &lt;legend&gt;Add Color&lt;/legend&gt;
+  &lt;input type=&quot;text&quot; placeholder=&quot;color&quot; bind:value={color} /&gt;
+  &lt;button type=&quot;submit&quot;&gt;Add Color&lt;/button&gt;
+&lt;/form&gt;
+&lt;ul&gt;
+{#each colors as color}
+  &lt;li style=&quot;color: {color}&quot;&gt;{color}&lt;/li&gt;
+{/each}
+&lt;/ul&gt;</code></pre>
+<p><a href="https://svelte.dev/repl/ecbfaee9af77416fa371081070fe9a15?version=3">https://svelte.dev/repl/ecbfaee9af77416fa371081070fe9a15?version=3</a></p>
+<p>O no, its not working! What could be going on? It turns out this is a tricky bit of Svelte, since Svelte uses assignment to detect reactivity, it is unable to detect modifications. So we need to remember to think in terms of immutability and return a new array when things change:</p>
+<pre><code class="language-js">function addColor(color) {
+  colors = [...colors, color]
+  color = &#39;&#39;
+}</code></pre>
+<p><a href="https://svelte.dev/repl/a505ede729624635805ee3943fcfb973?version=3.25.0">https://svelte.dev/repl/a505ede729624635805ee3943fcfb973?version=3.25.0</a></p>
+<h2 id="challenge---emoji-search">Challenge - Emoji Search</h2>
+<p>In this challenge we will create an emoji search app, where we can type in the text of an emoji, press the search button and see the results along with the key. In this challenge we will be using the npm module <code>node-emoji</code>.</p>
+<h3 id="install-the-node-emoji-module">Install the node-emoji module</h3>
+<p>In your console, type: <code>yarn add node-emoji</code></p>
+<h3 id="create-emoji-component">Create emoji component</h3>
+<p>Then lets create a new file in our src folder called <code>src/Emoji.svelte</code> and use this template to get us started:</p>
+<pre><code class="language-html">&lt;script&gt;
+  import emoji from &#39;node-emoji&#39;
+&lt;/script&gt;
+&lt;h1&gt;Emoji Search&lt;/h1&gt;
+&lt;input type=&quot;text&quot;&gt;
+&lt;button&gt;search&lt;/button&gt;</code></pre>
+<h3 id="add-emoji-component-to-appsvelte">Add emoji component to App.svelte</h3>
+<pre><code class="language-html">&lt;script&gt;
+  import Emoji from &#39;./Emoji.svelte&#39;
+  ...
+&lt;/script&gt;
+...
+&lt;Emoji /&gt;</code></pre>
+<h3 id="declare-a-local-variable-to-hold-the-results">Declare a local variable to hold the results</h3>
+<pre><code class="language-html">&lt;script&gt;
+  ...
+  let results = []
+&lt;/script&gt;</code></pre>
+<article><aside>
+
+<p>We can search for emojis using this modules <code>search</code> method <code>emoji.search(&#39;dog&#39;)</code><br>It returns an array of objects <code>[{emoji: &#39;🐕&#39;, key: &#39;dog2&#39;}, {emoji: &#39;🐶&#39;, key: &#39;dog&#39;}]</code>    </p>
+</aside></article>
+
+<h3 id="create-an-emoji-search-function-handler">Create an emoji search function handler</h3>
+<pre><code class="language-html">&lt;script&gt;
+  ... 
+  let q = &#39;&#39;
+  function search() {
+   results = emoji.search(q)
+  }
+&lt;/script&gt;</code></pre>
+<h3 id="bind-the-q-variable-to-the-input-element">Bind the q variable to the input element</h3>
+<pre><code class="language-html">&lt;input bind:value={q} /&gt;</code></pre>
+<h3 id="add-the-search-handler-to-the-button-click-event">Add the search handler to the button click event</h3>
+<pre><code class="language-html">&lt;button on:click={search}&gt;Search&lt;/button&gt;</code></pre>
+<h3 id="render-the-results-using-each">Render the results using #each</h3>
+<pre><code class="language-html">{#each results as result}
+  &lt;div&gt;{result.emoji} - {result.key}&lt;/div&gt;
+{/each}</code></pre>
+<h3 id="handle-the-empty-or-null-case">Handle the empty or null case</h3>
+<p>We can also handle cases where there is no data</p>
+<pre><code class="language-html">{#each results as result}
+
+{:else}
+&lt;div&gt;✨ No Emoji Found ✨&lt;/div&gt;
+{/each}</code></pre>
+<p>we can declare props to be exported by using the <code>export</code> syntax of es modules.</p>
+<p>Lets create an error component for our application, the error component will display an error message div using the following style:</p>
+<pre><code class="language-css">  .error {
+    padding: 16px;
+    text-align: center;
+    border-radius: 4px;
+    background-color: red;
+    color: white;
+    margin-bottom: 24px;
+  }
+</code></pre>
+<p>Create your error component in the <code>src/components/Error.svelte</code> file</p>
+<p><a href="https://svelte.dev/repl/9895c72136a3487cb9b68d73354be6e8?version=3">https://svelte.dev/repl/9895c72136a3487cb9b68d73354be6e8?version=3</a></p>
+<hr>
+<p><a href="/">Home</a></p>
+</main>
+
+
+  </div> 
+</body>
+
+</html>

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Svelte 101 Workshop - Actions</title>
+  <meta name="description" content="">
+  <link href="data:image/x-icon;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQEAYAAABPYyMiAAAABmJLR0T///////8JWPfcAAAACXBIWXMAAABIAAAASABGyWs+AAAAF0lEQVRIx2NgGAWjYBSMglEwCkbBSAcACBAAAeaR9cIAAAAASUVORK5CYII=" rel="icon" type="image/x-icon" />
+  
+    
+    <link rel="stylesheet" href="https://unpkg.com/mvp.css">
+    
+    
+  <meta property="og:title" content="Svelte 101 Workshop - Actions">
+  <meta property="og:image" content="">
+  <meta property="og:image:alt" content="">
+  <meta property="og:description" content="">
+  
+  
+  <link rel="stylesheet"
+        href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.0/build/styles/agate.min.css">
+  <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.0/build/highlight.min.js"></script>     
+  <script>hljs.initHighlightingOnLoad();</script>  
+  
+</head>
+
+<body>
+  <div id="wrapper">
+  <header>
+  <nav>
+    <a href="/">Workshop Menu</a>
+    <a href="/z-prereqs">Prerequisites</a>
+    <a href="/hyper63">About hyper63</a>
+  </nav>
+  <h1>SvelteJS 101 Workshop</h1>
+</header>
+
+<main>
+
+<h1 id="creating-a-modal-dialog-with-svelte">Creating a modal dialog with Svelte</h1>
+<p>Modals are a common building block in todays web applications, with Svelte you can create modals with its component architecture. Using the slot feature and the event dispatcher we can provide a modal component with a close button, that can accept any markup within the component to display as a modal box. We can also handle closing the dialog if the user clicks off of the dialog or make the modal require the user to click the close button.</p>
+<article><aside>
+
+<p>Disclaimer: there are many different ways to do modals and this modal does not try to address all use cases.</p>
+</aside></article>
+
+<p><a href="https://svelte.dev/repl/e94473c00c5c422fa736ba60a2ca0e61?version=3.25.1">https://svelte.dev/repl/e94473c00c5c422fa736ba60a2ca0e61?version=3.25.1</a></p>
+<h2 id="create-a-modal-trigger-button">Create a modal trigger button</h2>
+<pre><code class="language-html">&lt;script&gt;
+  import Modal from &#39;./Modal.svelte&#39;
+  let open = false
+
+  function toggle() {
+    open = !open
+  }
+&lt;/script&gt;
+&lt;main&gt;
+  &lt;h1&gt;Svelte Modal Example&lt;/h1&gt;
+  &lt;button on:click|preventDefault={toggle}&gt;Open Modal&lt;/button&gt;
+&lt;/main&gt;
+&lt;Modal {open} on:close={toggle}&gt;
+  &lt;h3&gt;My Modal Dialog&lt;/h3&gt;
+  &lt;figure&gt;&lt;img alt=&quot;bill&quot; src=&quot;http://www.fillmurray.com/60/60&quot; /&gt;&lt;/figure&gt;
+  &lt;p&gt;my modal dialog&lt;/p&gt;
+&lt;/Modal&gt;</code></pre>
+<h3 id="createeventdispatcher">createEventDispatcher</h3>
+<p>Using the createEventDispatcher function, we can create a dispatch function which can be called on our handleCloseClick function and it will dispatch a close event to the parent component.</p>
+<pre><code class="language-html">&lt;script&gt;
+  import { createEventDispatcher } from &#39;svelte&#39;
+  export let open = false
+  const dispatch = createEventDispatcher()
+
+
+  function handleCloseClick() {
+    dispatch(&#39;close&#39;)
+  }
+&lt;/script&gt;
+{#if open}
+&lt;div&gt;
+  &lt;section&gt;
+    &lt;aside&gt;
+      &lt;slot /&gt;
+    &lt;/aside&gt;
+  &lt;/section&gt;
+&lt;/div&gt;
+
+{/if}
+&lt;style&gt;
+  section {
+    height: 100%;
+    display: grid;
+    place-items: center;
+  }
+  aside {
+    background-color: white;
+  }
+  div {
+    position: absolute;
+    background-color: rgba(0,0,0,.8);
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+  }
+&lt;/style&gt;</code></pre>
+<h3 id="issue-background-scrolling">Issue: background scrolling.</h3>
+<p>Basically, we want to body of the page to be fixed when the modal is showing and to not be fixed when it is not showing. We can do this with Svelte Actions. Svelte actions allow you to write vanilla js at the html node level. This enables you to do things like focus and highlight text in input components or work with other native dom element attributes and properties. In this case, we want to access the body node and change the style of the overview value to &#39;hidden&#39; which will prevent the screen from scrolling. Then when the modal is closed we will revert the setting. The action function allows us to return an object with a destroy method, which will get invoked at the time of component destruction. Pretty cool!</p>
+<pre><code class="language-html">&lt;script&gt;
+  import { createEventDispatcher } from &#39;svelte&#39;
+  import { scale } from &#39;svelte/transition&#39;
+  export let open = false
+  const dispatch = createEventDispatcher()
+
+  function handleCloseClick() {
+    dispatch(&#39;close&#39;)
+  }
+
+  // action
+
+  function modalAction(node) {
+    let fns = []
+    if (document.body.style.overflow !== &#39;hidden&#39;) {
+      const original = document.body.style.overflow
+      document.body.style.overflow = &#39;hidden&#39;
+      fns = [...fns, () =&gt; document.body.style.overflow = original]
+    }
+    return {
+      destroy: () =&gt; fns.map(fn =&gt; fn())
+    }
+  }
+&lt;/script&gt;
+{#if open}
+  &lt;div use:modalAction on:click={handleCloseClick}&gt;
+    &lt;section&gt;
+      &lt;aside in:scale out:scale={{duration: 500}}&gt;
+        &lt;slot /&gt;
+        &lt;br /&gt;
+        &lt;button on:click|preventDefault={handleCloseClick}&gt;Close&lt;/button&gt;
+      &lt;/aside&gt;
+    &lt;/section&gt;
+  &lt;/div&gt;
+{/if}
+&lt;style&gt;
+  section {
+    height: 100%;
+    display: grid;
+    place-items: center;
+  }
+  aside {
+    background-color: white;
+  }
+  div {
+    position: absolute;
+    background-color: rgba(0,0,0,.8);
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+  }
+&lt;/style&gt;</code></pre>
+<hr>
+<p><a href="/">Home</a></p>
+</main>
+
+  </div> 
+</body>
+
+</html>

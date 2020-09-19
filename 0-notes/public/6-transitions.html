@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Svelte 101 Workshop - Transitions</title>
+  <meta name="description" content="">
+  <link href="data:image/x-icon;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQEAYAAABPYyMiAAAABmJLR0T///////8JWPfcAAAACXBIWXMAAABIAAAASABGyWs+AAAAF0lEQVRIx2NgGAWjYBSMglEwCkbBSAcACBAAAeaR9cIAAAAASUVORK5CYII=" rel="icon" type="image/x-icon" />
+  
+    
+    <link rel="stylesheet" href="https://unpkg.com/mvp.css">
+    
+    
+  <meta property="og:title" content="Svelte 101 Workshop - Transitions">
+  <meta property="og:image" content="">
+  <meta property="og:image:alt" content="">
+  <meta property="og:description" content="">
+  
+  
+  <link rel="stylesheet"
+        href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.0/build/styles/agate.min.css">
+  <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.0/build/highlight.min.js"></script>     
+  <script>hljs.initHighlightingOnLoad();</script>  
+  
+</head>
+
+<body>
+  <div id="wrapper">
+  <header>
+  <nav>
+    <a href="/">Workshop Menu</a>
+    <a href="/z-prereqs">Prerequisites</a>
+    <a href="/hyper63">About hyper63</a>
+  </nav>
+  <h1>SvelteJS 101 Workshop</h1>
+</header>
+
+<main>
+
+<h1 id="svelte-transitions">Svelte Transitions</h1>
+<p>Svelte is a comprehensive framework with many features added in the box when you need them. Transitions are one of those features. Transitions allow you to leverage css animation to use motion to transition from one presentation to the next. You can specify a transtion per native dom element and give the element a in transition or an out transition or just a transition for both. Svelte does not include transitions into the bundle unless you import them, so you only incur the cost when you need them. In this section, we will walk through the process of adding some transtions to a simple three page app.</p>
+<article><aside>
+
+<p>Open the app here and start the server.<br>I wonder if I can create one mega app then use the routers to separate the different apps during the workshop.<br>This will be less moving parts for the students and make transitions easy from one lesson to the next lesson.</p>
+</aside></article>
+
+<p>In this lesson you will learn how to use transitions to navigate pages, or add effects to specific dom elements.</p>
+<p>src/components/Page.svelte</p>
+<pre><code class="language-html">&lt;script&gt;
+  import { fade } from &#39;svelte/transition&#39;
+&lt;/script&gt;
+&lt;div transition:fade&gt;
+  &lt;slot /&gt;
+&lt;/div&gt;</code></pre>
+<p>src/components/Start.svelte</p>
+<pre><code class="language-html">&lt;script&gt;
+  import Nav from &#39;./components/Nav.svelte&#39;
+  import Page from &#39;./components/Page.svelte&#39;
+&lt;/script&gt;
+&lt;Nav /&gt;
+&lt;Page&gt;
+  ...
+&lt;/Page&gt;</code></pre>
+<hr>
+<p><a href="/">Home</a></p>
+</main>
+
+  </div> 
+</body>
+
+</html>

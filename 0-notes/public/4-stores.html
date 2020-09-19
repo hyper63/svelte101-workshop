@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Svelte 101 Workshop - Stores</title>
+  <meta name="description" content="">
+  <link href="data:image/x-icon;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQEAYAAABPYyMiAAAABmJLR0T///////8JWPfcAAAACXBIWXMAAABIAAAASABGyWs+AAAAF0lEQVRIx2NgGAWjYBSMglEwCkbBSAcACBAAAeaR9cIAAAAASUVORK5CYII=" rel="icon" type="image/x-icon" />
+  
+    
+    <link rel="stylesheet" href="https://unpkg.com/mvp.css">
+    
+    
+  <meta property="og:title" content="Svelte 101 Workshop - Stores">
+  <meta property="og:image" content="">
+  <meta property="og:image:alt" content="">
+  <meta property="og:description" content="">
+  
+  
+  <link rel="stylesheet"
+        href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.0/build/styles/agate.min.css">
+  <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.0/build/highlight.min.js"></script>     
+  <script>hljs.initHighlightingOnLoad();</script>  
+  
+</head>
+
+<body>
+  <div id="wrapper">
+  <header>
+  <nav>
+    <a href="/">Workshop Menu</a>
+    <a href="/z-prereqs">Prerequisites</a>
+    <a href="/hyper63">About hyper63</a>
+  </nav>
+  <h1>SvelteJS 101 Workshop</h1>
+</header>
+
+<main>
+
+<h1 id="svelte-stores">Svelte Stores</h1>
+<p>Svelte simplies the approach of sharing state between components, using readable and writable stores. Stores is a pattern that has a specific specification on how you interact with values.</p>
+<h2 id="setup">Setup</h2>
+<pre><code class="language-sh">npx degit hyper63/svelte-template stores-example
+cd $_
+yarn
+yarn dev</code></pre>
+<h2 id="writable-store">Writable store</h2>
+<p>With a writable svelte store you can set the value, subscribe to the changes of the store and update the value of the store by passing in a help function.</p>
+<pre><code class="language-js">import { writable } from &#39;svelte/store&#39;
+
+const state = writable({})
+
+state.subscribe(state =&gt; {
+  console.log(&#39;value changed to&#39;)
+  console.log(JSON.stringify(state, null, 2))
+})
+
+state.set({users: [{id: 1, name: &#39;Fred&#39;}]}) // logs change
+
+state.update(state =&gt; {
+  return {...state, projects: [{id:1, name: &#39;Blue Project&#39;}]}
+})
+
+// logs change
+
+unsubscribe()</code></pre>
+<h2 id="readable-store">Readable store</h2>
+<pre><code class="language-js">import { readable } from &#39;svelte/store&#39;
+
+const isOnline = readable(false, set =&gt; {
+  window.addEventListener(&#39;online&#39;, () =&gt; set(true))
+  window.addEventListener(&#39;offline&#39;, () =&gt; set(false))
+
+})
+
+const unsubscribe = isOnline.subscribe(v =&gt; {
+  console.log(&#39;online: &#39;, v)
+})
+
+// toggle network off and event should fire
+// unsubscribe()</code></pre>
+<h2 id="derived-stores">Derived stores</h2>
+<p>A derive store can take one or more stores and whenever one of those stores values change a callback runs which can then modify the value of the derive store.</p>
+<pre><code class="language-js">import { derived } from &#39;svelte/store&#39;;
+
+const doubled = derived(a, $a =&gt; $a * 2);</code></pre>
+<p>Example from <a href="https://svelte.dev/docs#derived">https://svelte.dev/docs#derived</a> - for more information on derived stores check out the link to the svelte documentation.</p>
+<h2 id="subscribing-to-stores-in-svelte">Subscribing to stores in svelte</h2>
+<p>Because Svelte is a compiler, the language added a nice shortcut for svelte stores to let the compiler handle 
+the subscribe and unsubscribe process for the svelte component.</p>
+<p>src/components/Header.svelte</p>
+<pre><code class="language-html">&lt;script&gt;
+import isOnline from &#39;./is-online.js&#39;
+export let title = &#39;Title&#39;
+&lt;/script&gt;
+&lt;header&gt;
+  &lt;div&gt;Online: {$isOnline}&lt;/div&gt;
+  &lt;h1&gt;{title}&lt;/h1&gt;
+&lt;/header&gt;</code></pre>
+<h2 id="implementing-a-redux-like-pattern-using-stores">Implementing a redux like pattern using stores</h2>
+<pre><code class="language-js">import { writable } from &#39;svelte/store&#39;
+import { reduce } from &#39;./lib/utils.js&#39;
+
+const initialState = {
+  users: [],
+  projects: [],
+  tasks: []
+}
+
+export const store = writable(initialState)
+
+export const dispatch = (action) =&gt; {
+  store.update(state =&gt; reduce(reducer, state, [action]))
+})
+
+function reducer((state, action) =&gt; {
+  return state
+})
+</code></pre>
+<h2 id="lets-see-this-redux-like-store-in-action">Lets see this redux like store in action</h2>
+<p>src/Signup.svelte</p>
+<pre><code class="language-html">&lt;script&gt;
+import { store, dispatch } from &#39;./store.js&#39;
+
+&lt;/script&gt;
+&lt;header&gt;
+  &lt;h1&gt;Signup User&lt;/h1&gt;
+&lt;/header&gt;
+&lt;main&gt;
+  &lt;form&gt;
+    &lt;div&gt;
+      &lt;label&gt;Username&lt;/label&gt;
+      &lt;input type=&quot;text&quot; /&gt;
+    &lt;/div&gt;
+    &lt;div&gt;
+      &lt;button type=&quot;submit&quot;&gt;Sign up&lt;/button&gt;
+      &lt;a href=&quot;/&quot;&gt;Cancel&lt;/a&gt;
+    &lt;/div&gt;
+  &lt;/form&gt;
+&lt;/main&gt;</code></pre>
+<h2 id="lets-add-this-store-to-the-signin-page-too">Lets add this store to the Signin page too</h2>
+<p>src/Signin.svelte</p>
+<pre><code class="language-html">&lt;script&gt;
+import { dispatch } from &#39;./store.js&#39;
+import { getJSON } from &#39;./lib/async.js&#39;
+
+&lt;/script&gt;
+&lt;header&gt;
+  &lt;h1&gt;Sigin User&lt;/h1&gt;
+&lt;/header&gt;
+&lt;main&gt;
+  &lt;form&gt;
+    &lt;div&gt;
+      &lt;label&gt;Select User&lt;/label&gt;
+      &lt;select&gt;
+        &lt;option&gt;-- select user --&lt;/option&gt;
+      &lt;/select&gt;
+    &lt;/div&gt;
+    &lt;div&gt;
+      &lt;button type=&quot;submit&quot;&gt;Sign in&lt;/button&gt;
+      &lt;a href=&quot;/&quot;&gt;Cancel&lt;/a&gt;
+    &lt;/div&gt;
+  &lt;/form&gt;
+&lt;/main&gt;</code></pre>
+<h2 id="how-to-check-if-a-user-is-logged-in">How to check if a user is logged in?</h2>
+<pre><code class="language-html">&lt;script&gt;
+import { store } from &#39;./store.js&#39;
+import { onMount } from &#39;svelte&#39;
+
+onMount(() =&gt; {
+  if (!$store.user) {
+    // not logged in
+    // redirect to start page
+  }
+})
+
+&lt;/script&gt;
+&lt;!-- template details --&gt;
+</code></pre>
+<hr>
+<p><a href="/">Home</a></p>
+</main>
+
+
+  </div> 
+</body>
+
+</html>

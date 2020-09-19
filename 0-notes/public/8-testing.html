@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Svelte 101 Workshop - Testing</title>
+  <meta name="description" content="">
+  <link href="data:image/x-icon;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQEAYAAABPYyMiAAAABmJLR0T///////8JWPfcAAAACXBIWXMAAABIAAAASABGyWs+AAAAF0lEQVRIx2NgGAWjYBSMglEwCkbBSAcACBAAAeaR9cIAAAAASUVORK5CYII=" rel="icon" type="image/x-icon" />
+  
+    
+    <link rel="stylesheet" href="https://unpkg.com/mvp.css">
+    
+    
+  <meta property="og:title" content="Svelte 101 Workshop - Testing">
+  <meta property="og:image" content="">
+  <meta property="og:image:alt" content="">
+  <meta property="og:description" content="">
+  
+  
+  <link rel="stylesheet"
+        href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.0/build/styles/agate.min.css">
+  <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.0/build/highlight.min.js"></script>     
+  <script>hljs.initHighlightingOnLoad();</script>  
+  
+</head>
+
+<body>
+  <div id="wrapper">
+  <header>
+  <nav>
+    <a href="/">Workshop Menu</a>
+    <a href="/z-prereqs">Prerequisites</a>
+    <a href="/hyper63">About hyper63</a>
+  </nav>
+  <h1>SvelteJS 101 Workshop</h1>
+</header>
+
+<main>
+
+<h1 id="svelte-unit-testing">Svelte Unit Testing</h1>
+<p>This article is about setting up unit testing with svelte using cypress. Cypress is an end to end testing tool for web applications. It can run in multiple browser environments, but it also can run headless. Cypress is a game changer for the front-end testing eco-system. Not only does Cypress work for end to end and integration tests, it has the ability to run unit tests on your components. We will walk through the setup involved to configure cypress to run unit tests in Svelte.</p>
+<article><aside>
+
+<p>🙏THANK YOU! 🙏 This is made possible by the great work Gleb Bahmutov of Cypress has done with the cypress-svelte-unit-test library, you will see how seemless it is to create and run component unit tests with cypress.</p>
+</aside></article>
+
+<h2 id="install-a-svelte-project">Install a svelte project</h2>
+<pre><code>npx degit sveltejs/template test-example
+cd $_
+yarn</code></pre><h2 id="install-cypress">Install cypress</h2>
+<p>The first thing we need to do is install cypress and cypress-svelte-unit-test:</p>
+<pre><code>yarn add -D cypress cypress-svelte-unit-test</code></pre><h2 id="initialize-cypress">Initialize Cypress</h2>
+<pre><code>yarn run cypress open</code></pre><p>Once you see the modal, you click <code>ok</code> and then close the cypress window.</p>
+<article><aside>
+
+<p>Cypress comes with a bunch of examples, but we don&#39;t need them for this walkthrough, you can get rid of them by running <code>rm -rf cypress/integration/examples</code></p>
+</aside></article>
+
+<h2 id="tell-cypress-to-use-rollup-when-working-with-svelte-components">Tell cypress to use rollup when working with svelte components</h2>
+<p>Open an index.js file in the cypress/plugins directory and edit the following function:</p>
+<pre><code>module.exports = (on) =&gt; {
+  const filePreprocessor = require(&#39;@bahmutov/cy-rollup&#39;)
+  on(&#39;file:preprocessor&#39;, filePreprocessor())
+}</code></pre><p>This code will give cypress the information it needs to compile the svelte component</p>
+<h2 id="turn-on-component-support-for-cypress">Turn on component support for cypress</h2>
+<p>When you installed cypress, the install created a cypress.json file, in this file we need to add the following entries:</p>
+<pre><code class="language-json">{
+  &quot;experimentalComponentTesting&quot;: true,
+  &quot;componentFolder&quot;: &quot;src&quot;,
+  &quot;testFiles&quot;: &quot;**/*spec.js&quot;
+}</code></pre>
+<p>The first entry is a flag to enable component testing, the second is the location of the components, finally the third entry is a pattern matcher for the test files.</p>
+<h2 id="write-a-test">Write a test</h2>
+<p>Now, we have our project configured we can write a test.</p>
+<p>In our src folder, lets create a test for the App component.</p>
+<p>create a new file src/App.spec.js</p>
+<pre><code class="language-js">import App from &#39;./App.svelte&#39;
+import { mount } from &#39;cypress-svelte-unit-test&#39;
+
+it(&#39;shows greeting&#39;, () =&gt; {
+  mount(App, { props: { name: &#39;World&#39; }})
+  cy.contains(&#39;h1&#39;, &#39;Hello World!&#39;)
+})</code></pre>
+<p>The it function takes a description and a callback function, in the callback function, 
+we use the imported mount function to mount the App component passing the name
+prop. Then we use cypress contains function to find the dom element h1 and validate 
+if it contains the following text &#39;Hello World!&#39;</p>
+<h2 id="run-the-test">Run the Test</h2>
+<p>Now that we have our test, lets run it and see if it passes.</p>
+<pre><code>yarn run cypress run</code></pre><p>This command will run cypress in the console.</p>
+<p>If everything went as planned you should see a print out showing App.spec.js passed and all specs passed!</p>
+<p>🎉 Congrats! 🎉</p>
+<h2 id="where-to-go-from-here">Where to go from here</h2>
+<p>Now that you have setup your project to use cypress with component tests, you will want to start to familarize yourself with the cypress documentation. The added benefit of setting cypress up for component testing, is that it is also ready to do end to end testing, all you have to do is start adding your end to end tests in the cypress/integration folder. Here is the link to the cypress guides - <a href="https://docs.cypress.io/guides/overview/why-cypress.html#In-a-nutshell">https://docs.cypress.io/guides/overview/why-cypress.html#In-a-nutshell</a></p>
+<hr>
+<p><a href="/">Home</a></p>
+</main>
+
+  </div> 
+</body>
+
+</html>

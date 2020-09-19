@@ -1,0 +1,11 @@
+const path = require('path')
+const express = require('express')
+const jsonServer = require('json-server')
+const app = express()
+const api = jsonServer.router('db.json')
+
+app.use('/api', api)
+app.use(express.static('public'))
+app.use((req, res) => res.sendFile(path.resolve('./public/index.html')))
+app.listen(3000)
+console.log('server listening on port 3000')

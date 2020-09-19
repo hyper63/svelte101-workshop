@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Svelte 101 Workshop - Async</title>
+  <meta name="description" content="">
+  <link href="data:image/x-icon;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQEAYAAABPYyMiAAAABmJLR0T///////8JWPfcAAAACXBIWXMAAABIAAAASABGyWs+AAAAF0lEQVRIx2NgGAWjYBSMglEwCkbBSAcACBAAAeaR9cIAAAAASUVORK5CYII=" rel="icon" type="image/x-icon" />
+  
+    
+    <link rel="stylesheet" href="https://unpkg.com/mvp.css">
+    
+    
+  <meta property="og:title" content="Svelte 101 Workshop - Async">
+  <meta property="og:image" content="">
+  <meta property="og:image:alt" content="">
+  <meta property="og:description" content="">
+  
+  
+  <link rel="stylesheet"
+        href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.0/build/styles/agate.min.css">
+  <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.0/build/highlight.min.js"></script>     
+  <script>hljs.initHighlightingOnLoad();</script>  
+  
+</head>
+
+<body>
+  <div id="wrapper">
+  <header>
+  <nav>
+    <a href="/">Workshop Menu</a>
+    <a href="/z-prereqs">Prerequisites</a>
+    <a href="/hyper63">About hyper63</a>
+  </nav>
+  <h1>SvelteJS 101 Workshop</h1>
+</header>
+
+<main>
+
+<h1 id="async-with-svelte">Async with Svelte</h1>
+<p>If you build web applications you have deal with async and the need to fetch data from web services. In this article we will walk through some examples of how to work with Svelte with async data. </p>
+<article><aside>
+
+<p>Disclaimer: these use cases are produced for demo and practice purposes only and you should consider your specific guidelines and design principles when working with components. </p>
+</aside></article>
+
+<h2 id="setup">Setup</h2>
+<pre><code class="language-sh">npx degit hyper63/svelte-template async-examples
+cd $_
+yarn
+yarn dev</code></pre>
+<h2 id="reading-data-from-a-rest-data-source">Reading data from a REST Data Source</h2>
+<h3 id="exercise-1----show-a-list-of-open-tasks-for-a-project">Exercise 1 -- Show a list of open tasks for a project</h3>
+<p>With any dynamic web application, you will want to read data from a data source and this use case is focused around REST APIs that return JSON.</p>
+<p>User Story</p>
+<pre><code>As a user viewing the &#39;Blue Project&#39; with an project id of 1    
+I want to read the list of available tasks for the blue project    
+So that I can see which one I may take ownership   </code></pre><p>Task Data Model</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>text</td>
+<td>string</td>
+<td>task description</td>
+</tr>
+<tr>
+<td>status</td>
+<td>string (enum)</td>
+<td>(open or closed)</td>
+</tr>
+<tr>
+<td>projectId</td>
+<td>number</td>
+<td>id the task belongs to</td>
+</tr>
+<tr>
+<td>assigned</td>
+<td>number</td>
+<td>userId the task is assigned to</td>
+</tr>
+</tbody></table>
+<p>src/ShowProject.svelte</p>
+<pre><code class="language-html">&lt;script&gt;
+  import { getJSON } from &#39;./lib/async.js&#39;
+  import { onMount } from &#39;svelte&#39;
+  export let params // params passed in from route /projects/:id 
+
+  let name = &#39;&#39;
+
+  // REST API call /api/tasks?projectId=1&amp;status=open&amp;_expand=project
+
+
+&lt;/script&gt;
+&lt;header&gt;
+  &lt;a href=&quot;/tasks/new?projectId={projectId}&quot;&gt;Add Task&lt;/a&gt;
+  &lt;h1&gt;Project {name}&lt;/h1&gt;
+&lt;/header&gt;
+&lt;main&gt;
+  &lt;h3&gt;Available Tasks&lt;/h3&gt;
+  &lt;!-- Add Available Tasks here --&gt;
+  &lt;!-- show Task text if not assigned --&gt;
+  &lt;!-- task should contain a hyperlink to /tasks/{id} --&gt; 
+&lt;/main&gt;
+&lt;style&gt;
+&lt;/style&gt;</code></pre>
+<h3 id="exercise-2---assign-existing-task-to-an-user">Exercise 2 - Assign existing task to an user</h3>
+<p>User Story</p>
+<pre><code>As an user viewing the Task with an id of 2   
+I want to select an user from a drop down of users   
+And click a button called &#39;assign&#39; to update the 
+Task Resource with an assigned user</code></pre><p>src/ShowTask.svelte</p>
+<pre><code class="language-html">&lt;script&gt;
+  import { getJSON, postJSON } from &#39;./lib/async.js&#39;
+
+  export let params // params passed in from route /tasks/:id
+
+  let text = &#39;&#39;
+
+  // REST API calls 
+  // GET /api/users
+  // GET /api/tasks/:id
+  // PUT /api/tasks/:id
+
+&lt;/script&gt;
+&lt;header&gt;
+  &lt;h1&gt;Task&lt;/h1&gt;
+&lt;/header&gt;
+&lt;main&gt;
+  &lt;h3&gt;Task: {task.text}&lt;/h3&gt;
+  &lt;p&gt;Status: {task.status}&lt;/p&gt;
+  &lt;p&gt;Project: {task.project.name}&lt;/p&gt;
+  &lt;!-- if task is not assigned show form and allow user assignment --&gt;
+  &lt;form&gt;
+    &lt;label&gt;Assigned To&lt;/label&gt;
+    &lt;select /&gt;
+    &lt;button type=&quot;submit&quot;&gt;Assign&lt;/button&gt;
+  &lt;/form&gt;
+&lt;/main&gt;</code></pre>
+<h3 id="exercise-3---create-a-new-task">Exercise 3 - create a new task</h3>
+<p>User Story</p>
+<pre><code>As an user when I have requested to create a new task for a given project   
+I want to add the task description and submit the new task to the server     
+So that I can see the task on the project show page</code></pre><p>src/FormTask.svelte</p>
+<pre><code class="language-html">&lt;script&gt;
+  import { postJSON } from &#39;./lib/async.js&#39;
+
+  export let qs // query string passed from route 
+
+  let projectId = (new URLSearchParams(qs)).get(&#39;projectId&#39;)
+
+&lt;/script&gt;
+&lt;header&gt;
+  &lt;h1&gt;Task&lt;/h1&gt;
+&lt;/header&gt;
+&lt;main&gt;
+  &lt;form&gt;
+    &lt;div&gt;
+      &lt;label&gt;Description&lt;/label&gt;
+      &lt;input type=&quot;text&quot;&gt;
+    &lt;/div&gt;
+    &lt;div&gt;
+      &lt;label&gt;Status&lt;/label&gt;
+      &lt;select&gt;
+        &lt;option value=&quot;open&quot;&gt;open&lt;/option&gt;
+        &lt;option value=&quot;closed&quot;&gt;closed&lt;/option&gt;
+      &lt;/select&gt;
+    &lt;/div&gt;
+    &lt;div&gt;
+      &lt;button type=&quot;submit&quot;&gt;Save&lt;/button&gt;
+      &lt;a href=&quot;/projects/{projectId}&quot;&gt;Cancel&lt;/a&gt;
+    &lt;/div&gt;
+  &lt;/form&gt;
+&lt;/main&gt;</code></pre>
+<hr>
+<p>If time permitting talk about <code>svelte-query</code> based on <code>react-query</code></p>
+<hr>
+<p><a href="/">Home</a></p>
+</main>
+
+  </div> 
+</body>
+
+</html>
