@@ -19,7 +19,7 @@ code: true
 
 # Async with Svelte
 
-If you build web applications you have deal with async and the need to fetch data from web services. In this article we will walk through some examples of how to work with Svelte with async data. 
+If you build web applications you have deal with async interactions and the need to fetch data from web services. In this article we will walk through some examples of how to work with Svelte with async data. 
 
 <article><aside>
 
@@ -30,11 +30,19 @@ Disclaimer: these use cases are produced for demo and practice purposes only and
 ## Setup
 
 ``` sh
-npx degit hyper63/svelte-template async-examples
+npx degit hyper63/svelte-template 3-async 
 cd $_
 yarn
 yarn dev
 ```
+
+<article><aside>
+NOTE: If you are in the workshop repository, this project is already created for you.
+</aside></article>
+
+## Using JSON-Server
+
+About this project, we are using a mock data api called `json-server`, the data is actually stored in a file called `db.json`. The api consists of a `users`, `projects`, and `tasks` collections. We can access these collections from the `/api` endpoint, using `GET, POST, PUT` http methods. For example: `GET /api/users` will return an array of all the users. `POST /api/users` will take the json request body and create a new user with a unique id number.
 
 ## Reading data from a REST Data Source
 
@@ -179,6 +187,12 @@ src/FormTask.svelte
 ---
 
 If time permitting talk about `svelte-query` based on `react-query`
+
+## Summary
+
+In this lesson we learned more about how svelte's template interact with the code sections of svelte and how to use either the `onMount` function or the `#await` directive to work with `promises` to display async data in a svelte component and to react to events and submit async data to the server. 
+
+
 
 ---
 

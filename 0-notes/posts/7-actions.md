@@ -17,7 +17,11 @@ code: true
 
 <main>
 
-# Creating a modal dialog with Svelte
+# Svelte 101 Workshop Actions
+
+Actions allow you to drop into imperative level of the dom on a given element. This gives you the ability at element create and/or destroy to manage the document object model (DOM) using vanilla js. In order to showcase this feature we are going to create a modal component. This model component will need to pop a model overlay and prevent the backend presentation from scrolling. We will address this issue using an action. Actions can be used for many more features.
+
+## Creating a modal dialog with Svelte
 
 
 Modals are a common building block in todays web applications, with Svelte you can create modals with its component architecture. Using the slot feature and the event dispatcher we can provide a modal component with a close button, that can accept any markup within the component to display as a modal box. We can also handle closing the dialog if the user clicks off of the dialog or make the modal require the user to click the close button.
@@ -27,6 +31,8 @@ Modals are a common building block in todays web applications, with Svelte you c
 Disclaimer: there are many different ways to do modals and this modal does not try to address all use cases.
 
 </aside></article>
+
+
 
 https://svelte.dev/repl/e94473c00c5c422fa736ba60a2ca0e61?version=3.25.1
 
@@ -157,6 +163,21 @@ Basically, we want to body of the page to be fixed when the modal is showing and
   }
 </style>
 ```
+
+## Challenge
+
+Create an input box on the `App.svelte` component and create an action to auto focus the component.
+
+## Bonus
+
+Default the component with some text, and everytime a user focuses the input auto select all the text.
+
+https://svelte.dev/repl/c479b45305984ec8a162cad49e494384?version=3.25.1
+
+## Summary
+
+In this lesson, we created a modal component and we learned how to use the action feature of svelte to drop down into the dom and do some vanilla js work with components. NOTE: always remember to clean up any listeners when using actions or they could cause memory leaks.
+
 
 ---
 

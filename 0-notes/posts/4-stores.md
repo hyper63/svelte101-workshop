@@ -19,16 +19,58 @@ code: true
 
 # Svelte Stores
 
+When building web applications using a component architecture you will quickly become concerned about state and how to manage state, how to share state between components. I common pattern when working with components is to create `logic` components and `presentation` components. The `logic` components focus on the `business logic` and the `presentation` components focus on the presentation. With this approach, the logic components change state and the presentation componentsneed to know about that state in order to present the updates. 
+
+You can satisfy these cases by passing data as props explicitly or by passing data implicitly using context. Both patterns are useful for different cases.
+
+Passing state via props:
+
+``` html
+<Component title="Hello World" />
+```
+
+``` html
+<script>
+export let title
+</script>
+<h1>{title}</h1>
+```
+
+Passing state via context:
+
+``` html
+<script>
+import { setContext } from 'svelte'
+
+setContext('color', 'red')
+</script>
+```
+
+``` html
+<script>
+import { getContext } from 'svelte'
+
+const color = getContext('color')
+</script>
+<div style="color: {color}">Hello World</div>
+```
+
+Another approach to sharing state is using Svelte Stores.
+
 Svelte simplies the approach of sharing state between components, using readable and writable stores. Stores is a pattern that has a specific specification on how you interact with values.
 
 ## Setup
 
 ``` sh
-npx degit hyper63/svelte-template stores-example
+npx degit hyper63/svelte-template 4-stores 
 cd $_
 yarn
 yarn dev
 ```
+
+<article><aside>
+NOTE: If you are in the workshops repository, then this project already exists and you don't need to create it.
+</aside></article>
 
 ## Writable store
 
@@ -201,6 +243,12 @@ onMount(() => {
 <!-- template details -->
 
 ```
+
+## Summary
+
+In this lesson, you learned how to create a svelte store and how to send updates to the store and how to subscribe to the store using the svelte `$` helper within a svelte component.
+
+
 ---
 
 [Home](/)

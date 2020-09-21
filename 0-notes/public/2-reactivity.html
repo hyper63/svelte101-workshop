@@ -40,12 +40,17 @@
 <main>
 
 <h2 id="svelte-reactivity">Svelte Reactivity</h2>
-<p>Reactivity is a special feature in Svelte that allows you to watch changes of specific variables and react to those changes, very similar to calculated fields in an excel spreadsheet. In this lesson, we will show a simple counter example to show how reactivity works, then create an example by building a BMI calculator, and an exercise to create amarkdown editor. </p>
+<p>Reactivity is a special feature in Svelte that allows you to watch changes of specific variables and react to those changes, very similar to calculated fields in an excel spreadsheet. In a spreadsheet, you have cells these cells can contains numbers or formulas, the formulas can declare to add two cells together or subtract two cells or take a sum of a group of cells. The cells represent the values in those cells, when the values change, the formula reacts to the change and updates its value. Svelte&#39;s reactivity works in the same way. The cells are variables and when those variables change the reactive code, ie the formulas change. In this lesson, we will show a simple counter example to show how reactivity works, then create an example by building a BMI calculator, and an exercise to create amarkdown editor. </p>
 <h2 id="setup">Setup</h2>
-<pre><code class="language-sh">npx degit sveltejs/template reactivity
+<pre><code class="language-sh">npx degit sveltejs/template 2-reactivity
 cd $_
 yarn
 yarn dev</code></pre>
+<article><aside>
+If you checked out the `hyper63/svelte101-workshop` repo, and have a console open in the root directory, you may have this project already on your system.
+</aside></article>
+
+<p>Open this project in your code editor and in the <code>src</code> folder, lets create a new file called <code>Example.svelte</code> </p>
 <h2 id="counter-example">Counter Example</h2>
 <pre><code>src/Example.svelte</code></pre><pre><code class="language-html">&lt;script&gt;
   let count = 0
@@ -65,6 +70,13 @@ yarn dev</code></pre>
     display: block;
   }
 &lt;/style&gt;</code></pre>
+<p>In the <code>App.svelte</code> file, lets import our example file:</p>
+<pre><code class="language-html">&lt;script&gt;
+  import Example from &#39;./Example.svelte&#39;
+&lt;/script&gt;
+&lt;Example /&gt;</code></pre>
+<p>We should be able to use our console to run the project.</p>
+<pre><code class="language-sh">yarn dev</code></pre>
 <h3 id="bmi-calculator">BMI Calculator</h3>
 <p>A BMI Calculator takes the height and weight of a patient and uses a formula to calculate the body mass index. In this example, we will create two sliders, one to represent the height and the other to represent the weight. As the sliders move, we will change the value of the BMI in real-time.</p>
 <p>The formula in lbs and inches is 703 * weight (lbs) / [height (inches)(squared)] then the result is part of the following scale:</p>
@@ -72,6 +84,8 @@ yarn dev</code></pre>
 Healthy = &gt; 18.6 &lt; 24.9
 Overweight = &gt; 25 &gt; 29.9
 Obese = &gt; 30 </p>
+<p>To build a BMI calculator we want to have two variables, the height in inches and the weight, then we want to bind them to some ui inputs of type range, so the user can select the heigh and weight. And as the values change, we want to calculate the bmi value. We will use the <code>$:</code> symbol to let Svelte know we want to make this code reactive. Then we want to display the results of the calculation on the view.</p>
+<p>Lets create a new file in the <code>src</code> folder called <code>Bmi.svelte</code>, lets copy the code below into the file to get started.</p>
 <p>Code File</p>
 <pre><code>src/Bmi.svelte</code></pre><pre><code class="language-html">&lt;script&gt;
 
@@ -84,13 +98,41 @@ Obese = &gt; 30 </p>
   &lt;h1&gt;BMI Calculator&lt;/h1&gt;
   &lt;aside&gt;
     &lt;label for=&quot;height&quot;&gt;Height (in)&lt;/label&gt;
-    &lt;input id=&quot;height&quot; type=&quot;range&quot; /&gt;
+    &lt;input id=&quot;height&quot; type=&quot;range&quot; min=&quot;0&quot; max=&quot;100&quot; /&gt;
     &lt;label for=&quot;weight&quot;&gt;Weight (lbs)&lt;/label&gt;
-    &lt;input id=&quot;weight&quot; type=&quot;range&quot; /&gt;
+    &lt;input id=&quot;weight&quot; type=&quot;range&quot; min=&quot;0&quot; max=&quot;500&quot; /&gt;
   &lt;/aside&gt;
 &lt;/section&gt;</code></pre>
+<p>Lets import this component into our App component.</p>
+<pre><code class="language-html">&lt;script&gt;
+  import Bmi from &#39;./Bmi.svelte&#39;
+&lt;/script&gt;
+&lt;Bmi /&gt;</code></pre>
+<p>Lets create two new variables, <code>height</code> and <code>weight</code> in the Bmi component.</p>
+<pre><code class="language-html">&lt;script&gt;
+  let height, weight
+
+  ...
+
+&lt;/script&gt;
+...</code></pre>
+<p>Bind the variables to the input elements.</p>
+<pre><code class="language-html">...
+&lt;input bind:value={height} type=&quot;range&quot; min=&quot;0&quot; max=&quot;100&quot;&gt;
+&lt;div&gt;Current Height(in): {height}&lt;/div&gt;
+...
+&lt;input bind:value={weight} type=&quot;range&quot; min=&quot;0&quot; max=&quot;500&quot;&gt;
+&lt;div&gt;Current Weight(lbs): {weight}&lt;/div&gt;</code></pre>
+<p>Lets react to the changes in the values:</p>
+<pre><code class="language-html">&lt;script&gt;
+  ...
+  $: bmi = calculate(weight, height)
+
+&lt;/script&gt;
+...
+&lt;div&gt;BMI: {bmi}&lt;/div&gt;</code></pre>
 <h3 id="markdown-parser">Markdown Parser</h3>
-<p>Another reactive example is to convert markdown to html and show the html side by side with the markdown.</p>
+<p>Exercise: Create a markdown editor with a live preview.</p>
 <p>In this exercise use the marked library which is already installed in this project. Here is an example of how to use it.</p>
 <pre><code class="language-html">&lt;script&gt;
   import marked from &#39;marked&#39;
@@ -117,6 +159,9 @@ Obese = &gt; 30 </p>
     &lt;/aside&gt;
   &lt;/section&gt;
 &lt;/main&gt;</code></pre>
+<h2 id="summary">Summary</h2>
+<p>In this lesson, we learned about svelte reactivity and how to use the <code>$:</code> reactive operator to watch local variables that change and react to the values to assign or perform logic.</p>
+<p>Creating reactive programs in svelte is very intuitive and simple.</p>
 <hr>
 <p><a href="/">Home</a></p>
 </main>

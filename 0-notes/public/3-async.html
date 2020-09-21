@@ -40,17 +40,23 @@
 <main>
 
 <h1 id="async-with-svelte">Async with Svelte</h1>
-<p>If you build web applications you have deal with async and the need to fetch data from web services. In this article we will walk through some examples of how to work with Svelte with async data. </p>
+<p>If you build web applications you have deal with async interactions and the need to fetch data from web services. In this article we will walk through some examples of how to work with Svelte with async data. </p>
 <article><aside>
 
 <p>Disclaimer: these use cases are produced for demo and practice purposes only and you should consider your specific guidelines and design principles when working with components. </p>
 </aside></article>
 
 <h2 id="setup">Setup</h2>
-<pre><code class="language-sh">npx degit hyper63/svelte-template async-examples
+<pre><code class="language-sh">npx degit hyper63/svelte-template 3-async 
 cd $_
 yarn
 yarn dev</code></pre>
+<article><aside>
+NOTE: If you are in the workshop repository, this project is already created for you.
+</aside></article>
+
+<h2 id="using-json-server">Using JSON-Server</h2>
+<p>About this project, we are using a mock data api called <code>json-server</code>, the data is actually stored in a file called <code>db.json</code>. The api consists of a <code>users</code>, <code>projects</code>, and <code>tasks</code> collections. We can access these collections from the <code>/api</code> endpoint, using <code>GET, POST, PUT</code> http methods. For example: <code>GET /api/users</code> will return an array of all the users. <code>POST /api/users</code> will take the json request body and create a new user with a unique id number.</p>
 <h2 id="reading-data-from-a-rest-data-source">Reading data from a REST Data Source</h2>
 <h3 id="exercise-1----show-a-list-of-open-tasks-for-a-project">Exercise 1 -- Show a list of open tasks for a project</h3>
 <p>With any dynamic web application, you will want to read data from a data source and this use case is focused around REST APIs that return JSON.</p>
@@ -181,6 +187,8 @@ So that I can see the task on the project show page</code></pre><p>src/FormTask.
 &lt;/main&gt;</code></pre>
 <hr>
 <p>If time permitting talk about <code>svelte-query</code> based on <code>react-query</code></p>
+<h2 id="summary">Summary</h2>
+<p>In this lesson we learned more about how svelte&#39;s template interact with the code sections of svelte and how to use either the <code>onMount</code> function or the <code>#await</code> directive to work with <code>promises</code> to display async data in a svelte component and to react to events and submit async data to the server. </p>
 <hr>
 <p><a href="/">Home</a></p>
 </main>

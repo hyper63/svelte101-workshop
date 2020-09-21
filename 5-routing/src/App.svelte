@@ -9,9 +9,15 @@
   let page, params, qs
   
   router('/', navigateTo(Start))
+  
+  /*
+
   router('/projects/:id', navigateTo(ShowProject))
+
   router('/tasks/new', navigateTo(FormTask))
   router('/tasks/:id', navigateTo(ShowTask))
+  */
+
 
   router.start()
 
@@ -19,7 +25,9 @@
     return ctx => {
       page = Component
       params = ctx.params
-      qs = ctx.querystring
+      qs = ( new URLSearchParams(ctx.querystring))
+        .entries()
+        .map(e => ({e[0]: e[1]}))
     }
   }
 </script>

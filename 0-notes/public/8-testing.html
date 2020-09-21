@@ -46,9 +46,10 @@
 <p>🙏THANK YOU! 🙏 This is made possible by the great work Gleb Bahmutov of Cypress has done with the cypress-svelte-unit-test library, you will see how seemless it is to create and run component unit tests with cypress.</p>
 </aside></article>
 
-<h2 id="install-a-svelte-project">Install a svelte project</h2>
-<pre><code>npx degit sveltejs/template test-example
-cd $_
+<h2 id="setup-lesson">Setup lesson</h2>
+<p>In your code editor open the <code>8-testing</code> folder and in your console. <code>CTRL-C</code> to stop the currently running
+server, then cd into <code>../8-testing</code> and initialize the project. </p>
+<pre><code>cd ../8-testing
 yarn</code></pre><h2 id="install-cypress">Install cypress</h2>
 <p>The first thing we need to do is install cypress and cypress-svelte-unit-test:</p>
 <pre><code>yarn add -D cypress cypress-svelte-unit-test</code></pre><h2 id="initialize-cypress">Initialize Cypress</h2>
@@ -91,9 +92,23 @@ if it contains the following text &#39;Hello World!&#39;</p>
 <p>Now that we have our test, lets run it and see if it passes.</p>
 <pre><code>yarn run cypress run</code></pre><p>This command will run cypress in the console.</p>
 <p>If everything went as planned you should see a print out showing App.spec.js passed and all specs passed!</p>
+<h2 id="lets-look-at-some-basic-cypress-commands">Lets look at some basic cypress commands.</h2>
+<p>src/App.spec.js</p>
+<pre><code class="language-js">...
+it(&#39;test2&#39;, () =&gt; {
+  mount(App)
+  cy.get(&#39;input&#39;).type(&#39;Everyone&#39;)
+  cy.contains(&#39;h1&#39;, &#39;Hello Everyone!&#39;)
+})</code></pre>
+<p>We can use the get function and pass an argument of any selector we want. Then use the type method to provide a value to the selected element.</p>
+<p>We can also use the get function to select a button and then use the <code>click</code> function to click that button.</p>
+<h2 id="challenge">Challenge</h2>
+<p>Create a button on the App.svelte form, then write a test to click that button and verify the button was clicked, maybe increment a counter, and the verify if an element contains the newly incremented value.</p>
 <p>🎉 Congrats! 🎉</p>
 <h2 id="where-to-go-from-here">Where to go from here</h2>
 <p>Now that you have setup your project to use cypress with component tests, you will want to start to familarize yourself with the cypress documentation. The added benefit of setting cypress up for component testing, is that it is also ready to do end to end testing, all you have to do is start adding your end to end tests in the cypress/integration folder. Here is the link to the cypress guides - <a href="https://docs.cypress.io/guides/overview/why-cypress.html#In-a-nutshell">https://docs.cypress.io/guides/overview/why-cypress.html#In-a-nutshell</a></p>
+<h2 id="summary">Summary</h2>
+<p>In this lesson, you learned how to setup cypress to use for unit testing, and created some simple tests using the cypress commands contains, get, type and click. You can dig deeper into cypress with the links above.</p>
 <hr>
 <p><a href="/">Home</a></p>
 </main>

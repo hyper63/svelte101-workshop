@@ -40,12 +40,37 @@
 <main>
 
 <h1 id="svelte-stores">Svelte Stores</h1>
+<p>When building web applications using a component architecture you will quickly become concerned about state and how to manage state, how to share state between components. I common pattern when working with components is to create <code>logic</code> components and <code>presentation</code> components. The <code>logic</code> components focus on the <code>business logic</code> and the <code>presentation</code> components focus on the presentation. With this approach, the logic components change state and the presentation componentsneed to know about that state in order to present the updates. </p>
+<p>You can satisfy these cases by passing data as props explicitly or by passing data implicitly using context. Both patterns are useful for different cases.</p>
+<p>Passing state via props:</p>
+<pre><code class="language-html">&lt;Component title=&quot;Hello World&quot; /&gt;</code></pre>
+<pre><code class="language-html">&lt;script&gt;
+export let title
+&lt;/script&gt;
+&lt;h1&gt;{title}&lt;/h1&gt;</code></pre>
+<p>Passing state via context:</p>
+<pre><code class="language-html">&lt;script&gt;
+import { setContext } from &#39;svelte&#39;
+
+setContext(&#39;color&#39;, &#39;red&#39;)
+&lt;/script&gt;</code></pre>
+<pre><code class="language-html">&lt;script&gt;
+import { getContext } from &#39;svelte&#39;
+
+const color = getContext(&#39;color&#39;)
+&lt;/script&gt;
+&lt;div style=&quot;color: {color}&quot;&gt;Hello World&lt;/div&gt;</code></pre>
+<p>Another approach to sharing state is using Svelte Stores.</p>
 <p>Svelte simplies the approach of sharing state between components, using readable and writable stores. Stores is a pattern that has a specific specification on how you interact with values.</p>
 <h2 id="setup">Setup</h2>
-<pre><code class="language-sh">npx degit hyper63/svelte-template stores-example
+<pre><code class="language-sh">npx degit hyper63/svelte-template 4-stores 
 cd $_
 yarn
 yarn dev</code></pre>
+<article><aside>
+NOTE: If you are in the workshops repository, then this project already exists and you don't need to create it.
+</aside></article>
+
 <h2 id="writable-store">Writable store</h2>
 <p>With a writable svelte store you can set the value, subscribe to the changes of the store and update the value of the store by passing in a help function.</p>
 <pre><code class="language-js">import { writable } from &#39;svelte/store&#39;
@@ -179,6 +204,8 @@ onMount(() =&gt; {
 &lt;/script&gt;
 &lt;!-- template details --&gt;
 </code></pre>
+<h2 id="summary">Summary</h2>
+<p>In this lesson, you learned how to create a svelte store and how to send updates to the store and how to subscribe to the store using the svelte <code>$</code> helper within a svelte component.</p>
 <hr>
 <p><a href="/">Home</a></p>
 </main>

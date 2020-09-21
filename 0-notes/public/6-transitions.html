@@ -41,11 +41,18 @@
 
 <h1 id="svelte-transitions">Svelte Transitions</h1>
 <p>Svelte is a comprehensive framework with many features added in the box when you need them. Transitions are one of those features. Transitions allow you to leverage css animation to use motion to transition from one presentation to the next. You can specify a transtion per native dom element and give the element a in transition or an out transition or just a transition for both. Svelte does not include transitions into the bundle unless you import them, so you only incur the cost when you need them. In this section, we will walk through the process of adding some transtions to a simple three page app.</p>
+<h2 id="lesson-setup">Lesson Setup</h2>
 <article><aside>
 
-<p>Open the app here and start the server.<br>I wonder if I can create one mega app then use the routers to separate the different apps during the workshop.<br>This will be less moving parts for the students and make transitions easy from one lesson to the next lesson.</p>
+<ul>
+<li>Close current server</li>
+<li>open the <code>6-transitions</code> folder</li>
+<li>open the console in this folder</li>
+<li>run <code>yarn dev</code></li>
+</ul>
 </aside></article>
 
+<h2 id="lesson-introduction">Lesson Introduction</h2>
 <p>In this lesson you will learn how to use transitions to navigate pages, or add effects to specific dom elements.</p>
 <p>src/components/Page.svelte</p>
 <pre><code class="language-html">&lt;script&gt;
@@ -54,15 +61,65 @@
 &lt;div transition:fade&gt;
   &lt;slot /&gt;
 &lt;/div&gt;</code></pre>
-<p>src/components/Start.svelte</p>
+<h2 id="add-transition-component-to-each-page">Add transition component to each page</h2>
+<p>src/Start.svelte</p>
 <pre><code class="language-html">&lt;script&gt;
-  import Nav from &#39;./components/Nav.svelte&#39;
   import Page from &#39;./components/Page.svelte&#39;
 &lt;/script&gt;
-&lt;Nav /&gt;
+...
 &lt;Page&gt;
   ...
 &lt;/Page&gt;</code></pre>
+<p>src/Blog.svelte</p>
+<pre><code class="language-html">&lt;script&gt;
+  ...
+  import Page from &#39;./components/Page.svelte&#39;
+&lt;/script&gt;
+...
+&lt;Page&gt;
+  ...
+&lt;/Page&gt;</code></pre>
+<p>src/About.svelte</p>
+<pre><code class="language-html">&lt;script&gt;
+  ...
+  import Page from &#39;./components/Page.svelte&#39;
+&lt;/script&gt;
+...
+&lt;Page&gt;
+  ...
+&lt;/Page&gt;</code></pre>
+<h2 id="work-with-page-transitions">Work with page transitions</h2>
+<p>src/components/Page.svelte</p>
+<pre><code class="language-html">&lt;script&gt;
+  import { blur, fade } from &#39;svelte/transition&#39;
+&lt;/script&gt;
+&lt;div in:fade={{delay: 1000, duration: 1000}} out:blur={{duration: 500}}&gt;
+  &lt;slot /&gt;
+&lt;/div&gt;
+&lt;style&gt;
+  div {
+    height: 100%;
+  }
+&lt;/style&gt;</code></pre>
+<h2 id="transitioning-specific-components">Transitioning specific components</h2>
+<p>Lets say we have two cards on our <code>Start</code> page and we want one to fly in from the left and the other to fly in from the right.</p>
+<pre><code class="language-html">&lt;script&gt;
+  ...
+  import { fly } from &#39;svelte/transition&#39;
+  ...
+&lt;/script&gt;
+...
+  &lt;section&gt;
+    &lt;aside in:fly={{x: -1000, duration: 1000, delay: 1000}}&gt;
+      &lt;p&gt;Card 1&lt;/p&gt;
+    &lt;/aside&gt;
+    &lt;aside in:fly={{x: 1000, duration: 1000, delay: 1000}}&gt;
+      &lt;p&gt;Card 2&lt;/p&gt;
+    &lt;/aside&gt;
+  &lt;/section&gt;
+...</code></pre>
+<h2 id="summary">Summary</h2>
+<p>In this lesson, you learned how to apply transitions to pages and specific elements. We learned about the fade, blur and fly transitions. You can learn more about each transition and their attributes in the svelte documentation: <a href="https://svelte.dev/docs#svelte_transition">https://svelte.dev/docs#svelte_transition</a></p>
 <hr>
 <p><a href="/">Home</a></p>
 </main>

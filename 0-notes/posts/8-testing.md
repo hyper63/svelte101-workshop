@@ -27,11 +27,13 @@ This article is about setting up unit testing with svelte using cypress. Cypress
 
 </aside></article>
 
-## Install a svelte project
+## Setup lesson 
+
+In your code editor open the `8-testing` folder and in your console. `CTRL-C` to stop the currently running
+server, then cd into `../8-testing` and initialize the project. 
 
 ```
-npx degit sveltejs/template test-example
-cd $_
+cd ../8-testing
 yarn
 ```
 
@@ -119,12 +121,36 @@ This command will run cypress in the console.
 
 If everything went as planned you should see a print out showing App.spec.js passed and all specs passed!
 
+## Lets look at some basic cypress commands.
+
+src/App.spec.js
+
+``` js
+...
+it('test2', () => {
+  mount(App)
+  cy.get('input').type('Everyone')
+  cy.contains('h1', 'Hello Everyone!')
+})
+```
+
+We can use the get function and pass an argument of any selector we want. Then use the type method to provide a value to the selected element.
+
+We can also use the get function to select a button and then use the `click` function to click that button.
+
+## Challenge
+
+Create a button on the App.svelte form, then write a test to click that button and verify the button was clicked, maybe increment a counter, and the verify if an element contains the newly incremented value.
+
 🎉 Congrats! 🎉
 
 ## Where to go from here
 
 Now that you have setup your project to use cypress with component tests, you will want to start to familarize yourself with the cypress documentation. The added benefit of setting cypress up for component testing, is that it is also ready to do end to end testing, all you have to do is start adding your end to end tests in the cypress/integration folder. Here is the link to the cypress guides - https://docs.cypress.io/guides/overview/why-cypress.html#In-a-nutshell
 
+## Summary
+
+In this lesson, you learned how to setup cypress to use for unit testing, and created some simple tests using the cypress commands contains, get, type and click. You can dig deeper into cypress with the links above.
 
 ---
 
