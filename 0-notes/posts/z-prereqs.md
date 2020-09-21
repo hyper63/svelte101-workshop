@@ -40,4 +40,14 @@ There is a MDN tutorial as well - https://developer.mozilla.org/en-US/docs/Learn
   </aside>
 </article>
 
+<section style="display: block">
+
+Check out the github repository: https://github.com/hyper63/svelte101-workshop
+
+``` sh
+npx degit hyper63/svelte101-workshop svelte101
+```
+
+</section>
+
 </main>
