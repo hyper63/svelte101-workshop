@@ -11,6 +11,7 @@ const posts = [
   '6-transitions',
   '7-actions',
   '8-testing',
+  'hyper63',
   'z-prereqs'
 ]
 
