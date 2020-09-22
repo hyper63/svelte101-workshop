@@ -43,6 +43,7 @@ There is a MDN tutorial as well - https://developer.mozilla.org/en-US/docs/Learn
   </aside>
 </article>
 
+
 ## What is Svelte?
 
 Svelte is a web development framework that takes a different approach to creating rich user interfaces online. From the developers perspective Svelte is designed almost as a super-set of HTML, it wants to embrace all of the web's usability and features. The way svelte transforms from a developer friendly component model to a performant web application is via a compiler, so a large part of svelte is its compiler engine. This engine takes the declarative code you write and transforms it, into vanilla js that is very performant. This is a different approach from other frameworks which use things like the virtual dom at runtime to convert a declarative style of code to the web code need to run in the browser environment.
@@ -83,9 +84,15 @@ This workshop assumes you have NodeJS installed as well as yarn `npm install yar
 
 We can create a svelte project by running the following command your console:
 
+<article><aside>
+
+We use yarn in this workshop `npm install yarn -g` you can use `npm` as well.
+
+</aside></article>
+
 ``` sh
-npx degit sveltejs/template svelte-basics
-cd svelte-basics
+npx degit sveltejs/template 1-basics
+cd $_ 
 yarn
 ```
 
@@ -388,6 +395,17 @@ https://svelte.dev/repl/a505ede729624635805ee3943fcfb973?version=3.25.0
 
 In this challenge we will create an emoji search app, where we can type in the text of an emoji, press the search button and see the results along with the key. In this challenge we will be using the npm module `node-emoji`.
 
+### Challenge setup
+
+To work on the challenge we went ahead and setup a project, which is just the default svelte template project in the 1-basics folder for you to start with.
+
+``` sh
+git clone https://github.com/hyper63/svelte101-workshop
+cd svelte101-workshop
+cd 1-basics
+yarn
+```
+
 ### Install the node-emoji module
 
 In your console, type: `yarn add node-emoji`
@@ -476,26 +494,25 @@ We can also handle cases where there is no data
 {/each}
 ```
 
+### Add some styles
 
-we can declare props to be exported by using the `export` syntax of es modules.
-
-Lets create an error component for our application, the error component will display an error message div using the following style:
-
-``` css
-  .error {
-    padding: 16px;
-    text-align: center;
+``` html
+<style>
+  div {
+    border: 1px solid black;
     border-radius: 4px;
-    background-color: red;
-    color: white;
-    margin-bottom: 24px;
+    padding: 8px;
   }
-
+  div:hover {
+    background-color: peru;
+    color: white;
+  }
+</style>
 ```
 
-Create your error component in the `src/components/Error.svelte` file
+## Summary
 
-https://svelte.dev/repl/9895c72136a3487cb9b68d73354be6e8?version=3
+In this lesson, you should have been introduced to the basics of svelte, its template language and how each section of the component interacts with each other.
 
 ---
 
